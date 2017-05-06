@@ -17,11 +17,17 @@ public class RemoteLoadSpringSupport extends Config {
 
 
     @Override
-    protected Properties mergeProperties() {
+    protected Properties mergeProperties() throws IOException {
 
         String pre = getPre();
         String suf = getSuf();
         String update = getUpdate();
+
+        String url = getUrl();
+
+        if (url == "" || url == null) {
+            return super.mergeProperties();
+        }
 
         Properties properties = new Properties();
         PropertyLoader loader = new SvnPropertyLoader();
