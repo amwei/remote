@@ -20,12 +20,22 @@ public class RemoteLoadSpringSupport extends Config {
 
     @Override
     protected Properties mergeProperties() throws IOException {
+
         // 调用spring
         Properties properties = super.mergeProperties();
+
+        /**
+         * 没有配置url 的情况下 跳过加载svn配置
+         */
+        String url = getUrl();
+        if (url == null || "".equals(url)) {
+            return properties;
+        }
 
         String pre = getPre();
         String suf = getSuf();
         String update = getUpdate();
+
         PropertyLoader loader = new SvnPropertyLoader();
         if (pre == null || "".equals(pre)) {
             super.setPre("");
