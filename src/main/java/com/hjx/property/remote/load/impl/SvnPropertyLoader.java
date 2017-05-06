@@ -45,7 +45,6 @@ public class SvnPropertyLoader implements PropertyLoader {
 
     @Override
     public List<File> load(Config config) {
-        System.out.println(config);
         this.config = config;
         String url = config.getUrl();
         String userName = config.getUserName();

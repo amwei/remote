@@ -16,20 +16,16 @@ import java.util.Properties;
 public class RemoteLoadSpringSupport extends Config {
 
 
+
+
     @Override
     protected Properties mergeProperties() throws IOException {
+        // 调用spring
+        Properties properties = super.mergeProperties();
 
         String pre = getPre();
         String suf = getSuf();
         String update = getUpdate();
-
-        String url = getUrl();
-
-        if (url == "" || url == null) {
-            return super.mergeProperties();
-        }
-
-        Properties properties = new Properties();
         PropertyLoader loader = new SvnPropertyLoader();
         if (pre == null || "".equals(pre)) {
             super.setPre("");
@@ -38,7 +34,6 @@ public class RemoteLoadSpringSupport extends Config {
             super.setSuf(".properties");
         }
         List<File> files = null;
-
         /**
          * 更新配置文件
          */
@@ -53,6 +48,9 @@ public class RemoteLoadSpringSupport extends Config {
             files = Arrays.asList(file.listFiles());
         }
 
+        /**
+         * 合并
+         */
         for (File file : files) {
             InputStream stream = null;
             try {
