@@ -1,5 +1,6 @@
 package com.hjx.property.remote;
 
+import com.hjx.property.remote.load.PropertyLoader;
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 
 import java.io.Serializable;
@@ -46,8 +47,18 @@ public class Config extends PropertyPlaceholderConfigurer implements Serializabl
      */
     private String appName;
 
+    /**
+     * 缓存的地址
+     */
+    private String cachePath;
+
 
     public Config() {
+        setAppName("app_config");
+        setUpdate("true");
+        setPre("");
+        setSuf(".properties");
+        setCachePath(PropertyLoader.REPOSITORY_PATH);
     }
 
     public String getPassWord() {
@@ -106,16 +117,25 @@ public class Config extends PropertyPlaceholderConfigurer implements Serializabl
         this.update = update;
     }
 
+    public String getCachePath() {
+        return cachePath;
+    }
+
+    public void setCachePath(String cachePath) {
+        this.cachePath = cachePath;
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("{");
-        sb.append("            \"userName\"=\"").append(userName).append('\"');
-        sb.append(",             \"passWord\"=\"").append(passWord).append('\"');
-        sb.append(",             \"url\"=\"").append(url).append('\"');
-        sb.append(",             \"suf\"=\"").append(suf).append('\"');
-        sb.append(",             \"pre\"=\"").append(pre).append('\"');
-        sb.append(",             \"update\"=\"").append(update).append('\"');
-        sb.append(",             \"appName\"=\"").append(appName).append('\"');
+        sb.append("   \"userName\"=\"").append(userName).append('\"');
+        sb.append(",    \"passWord\"=\"").append(passWord).append('\"');
+        sb.append(",    \"url\"=\"").append(url).append('\"');
+        sb.append(",    \"suf\"=\"").append(suf).append('\"');
+        sb.append(",    \"pre\"=\"").append(pre).append('\"');
+        sb.append(",    \"update\"=\"").append(update).append('\"');
+        sb.append(",    \"appName\"=\"").append(appName).append('\"');
+        sb.append(",    \"cachePath\"=\"").append(cachePath).append('\"');
         sb.append('}');
         return sb.toString();
     }

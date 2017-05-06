@@ -16,51 +16,31 @@ import java.util.Properties;
 public class RemoteLoadSpringSupport extends Config {
 
 
-
-
     @Override
     protected Properties mergeProperties() throws IOException {
-
+        super.logger.info("开始加载配置。。。");
         // 调用spring
         Properties properties = super.mergeProperties();
-
-        /**
-         * 没有配置url 的情况下 跳过加载svn配置
-         */
+        // 没有配置url 的情况下 跳过加载svn配置
         String url = getUrl();
         if (url == null || "".equals(url)) {
             return properties;
         }
 
-        String pre = getPre();
-        String suf = getSuf();
-        String update = getUpdate();
-
         PropertyLoader loader = new SvnPropertyLoader();
-        if (pre == null || "".equals(pre)) {
-            super.setPre("");
-        }
-        if (suf == null || "".equals(suf)) {
-            super.setSuf(".properties");
-        }
         List<File> files = null;
-        /**
-         * 更新配置文件
-         */
-        if ("true".equalsIgnoreCase(update)) {
-            FileUtils.removeFiles(PropertyLoader.REPOSITORY_PATH);
+        //更新配置文件
+        if ("true".equalsIgnoreCase(getUpdate())) {
+            FileUtils.removeFiles(getCachePath());
             files = loader.load(this);
         }
         // 读取现有的配置文件
         else {
-            String localPath = PropertyLoader.REPOSITORY_PATH + PropertyLoader.PATH_SEPARATOR_CHAR + super.getAppName();
+            String localPath = getCachePath() + PropertyLoader.PATH_SEPARATOR_CHAR + super.getAppName();
             File file = new File(localPath);
             files = Arrays.asList(file.listFiles());
         }
-
-        /**
-         * 合并
-         */
+        //合并
         for (File file : files) {
             InputStream stream = null;
             try {

@@ -74,18 +74,15 @@ public class SvnPropertyLoader implements PropertyLoader {
     }
 
     private List<File> getFile(List<SVNDirEntry> entries) {
-
         List<File> files = new ArrayList<File>();
-
-        String url = config.getUrl();
         for (SVNDirEntry dirEntry : entries) {
             try {
                 File cacheFile = cacheFile(dirEntry.getRelativePath());
                 OutputStream outputStream = new FileOutputStream(cacheFile);
                 String filepath = dirEntry.getRelativePath();
+                // 抓取文件
                 long length = repository.getFile(filepath, dirEntry.getRevision(), null, outputStream);
                 files.add(cacheFile);
-                System.out.println(length);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             } catch (SVNException e) {
@@ -96,11 +93,23 @@ public class SvnPropertyLoader implements PropertyLoader {
     }
 
     private File cacheFile(String fileName) {
-        File file = new File(REPOSITORY_PATH +PATH_SEPARATOR_CHAR+config.getAppName()+ PATH_SEPARATOR_CHAR + fileName);
+        File file = new File(config.getCachePath()
+                .concat(PATH_SEPARATOR_CHAR)
+                .concat(config.getAppName())
+                .concat(PATH_SEPARATOR_CHAR)
+                .concat(fileName));
+        System.out.println("创建缓存文件："+file.getPath());
         FileUtils.createFile(file);
         return file;
     }
 
+    /**
+     * 登陆 svn
+     * @param url
+     * @param userName
+     * @param passWord
+     * @return
+     */
     private SVNRepository login(String url, String userName, String passWord) {
         SVNRepository repository = null;
         try {

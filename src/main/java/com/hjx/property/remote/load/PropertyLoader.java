@@ -13,7 +13,7 @@ import java.util.List;
  */
 public interface PropertyLoader {
 
-    char PATH_SEPARATOR_CHAR = '/';
+    String PATH_SEPARATOR_CHAR = "/";
 
     String REPOSITORY_PATH = PathUtils.getUserHome() + PATH_SEPARATOR_CHAR + "remot_config";
 
